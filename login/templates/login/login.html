@@ -1,0 +1,143 @@
+{% extends "tuition/base.html" %}
+{% block title %}
+  Login
+{% endblock %}
+
+{% block style %}
+<style>
+ 
+
+ #addStud{
+        position:absolute;
+        top:120px;
+        width:30vw;
+        left:440px;
+        display:flex;
+        flex-direction: column;
+        box-shadow: 1px 1px 5px var(--grey);
+    }
+
+     #title{
+      width:30vw;
+      height:70px;
+      text-align:center;
+      line-height:70px;
+      font-size:30px;
+      color:var(--whitesmoketext);
+      font-weight: bold;
+      background-color: var(--cornblue);
+      margin-bottom:30px;
+    }
+
+    .full{
+      display:block;
+      padding-left:31px;
+      padding-top:5px;
+      color: var(--black);
+      font-size: 20px;
+    }
+    .full input{
+      height:32px;
+      width:320px;
+      border-radius:3px;
+      border:solid 1px var(--lgray);
+      background-color:var(--whitesmoke);
+      color:var(--black);
+    }
+
+     #submit{
+      margin-top:30px;
+      margin-bottom:30px;
+      width:150px;
+      height:40px;
+      border-radius:20px;
+      border:none;
+      background-color: var(--cornblue);
+      color:var(--white);
+      margin-left:115px;
+      cursor:pointer;
+      font-size:18px;
+      transition:0.3s;
+    }
+    
+    #submit:active{
+       transform: scale(1.2);
+    }
+
+    #centerdiv{
+      width:30vw;
+      display:flex;
+      flex-direction: column;
+      position:absolute;
+      margin-top:60px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #toaster{
+      height:38px;
+      width:27vw;
+      background-color: var(--lblue);
+      line-height: 35px;
+      color:var(--black);
+      text-align: center;
+      font-size:20px;
+      border-radius: 5px;
+      border: solid 1px var(--lcyan);
+      opacity:0.7;
+    }
+    
+    #toaster i{
+      position:relative;
+      left:20px;
+      transform: scale(0.6);
+      top:2px;
+      cursor: pointer;
+    }
+
+</style>
+  
+{% endblock %}
+
+{% block content %}
+<div id="addStud">
+   <div id="title">Teacher Login</div>
+   <form method="post" action="#">
+      {% csrf_token %}
+   <div class="full"><label for="name">Name : </label></div>
+   <div class="full"><input type="text" id="name" name="name" placeholder="MMAK,Dronacharya"></div>
+   <div class="full" style="margin-top:10px;"><label for="fees">Password: </label></div>
+   <div class="full"><input type="password" id="pass" name="pass" placeholder=""></div>
+
+   <button type="submit" id="submit" name="submit" value="submit" >Login</button>
+   </form>
+<div>
+
+{% for msg in messages %}
+<div id="centerdiv">
+    <div id="toaster">
+        {{msg}} <i id="crosser" class="fa-solid fa-xmark"></i>
+    </div>
+</div>
+{% endfor %}
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+//for toast
+var cross = document.getElementById("crosser");
+var div = document.getElementById("toaster");
+
+cross.addEventListener("click",function(){
+     div.style.display="none";
+
+});
+
+</script>
+
+
+
+{% endblock %}
+

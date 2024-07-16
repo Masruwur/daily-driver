@@ -1,0 +1,237 @@
+{% extends "tuition/base.html" %}
+{% block title %}
+Add Student
+{% endblock %}
+
+{% block style %}
+<style>
+    #addStud{
+        position:absolute;
+        top:120px;
+        width:30vw;
+        left:440px;
+        display:flex;
+        flex-direction: column;
+        box-shadow: 1px 1px 5px var(--grey);
+    }
+
+    #title{
+      width:30vw;
+      height:70px;
+      text-align:center;
+      line-height:70px;
+      font-size:30px;
+      color:var(--whitesmoketext);
+      font-weight: bold;
+      background-color: var(--cornblue);
+      margin-bottom:30px;
+    }
+
+    .full{
+      display:block;
+      padding-left:31px;
+      padding-top:5px;
+      color: var(--black);
+      font-size: 20px;
+    }
+    .full input{
+      height:32px;
+      width:320px;
+      border-radius:3px;
+      border:solid 1px var(--lgray);
+      background-color:var(--whitesmoke);
+      color:var(--black);
+    }
+    
+    #days div.class{
+        display:block;
+        height: 28px;
+        width :160px;
+        background-color: var(--white);
+        border-bottom:solid 1px var(--lgray);
+        margin-left: 31px;
+        display:none;
+    }
+
+    #days div#start i:hover div.class{
+      display:block;
+    }
+    .dayLabel{
+      color:var(--black);
+    }
+    
+    #start{
+      height: 28px;
+      width :160px;
+      background-color: var(--white);
+      color: var(--black);
+      margin-top:30px;
+      margin-left:31px;
+      font-size:20px;
+    }
+   
+    #register{
+      margin-top:30px;
+      margin-bottom:30px;
+      width:150px;
+      height:40px;
+      border-radius:20px;
+      border:none;
+      background-color: var(--cornblue);
+      color:var(--white);
+      margin-left:115px;
+      cursor:pointer;
+      font-size:18px;
+      transition:0.3s;
+    }
+    
+    #register:active{
+       transform: scale(1.2);
+    }
+
+    #centerer{
+      width:30vw;
+      display:flex;
+      flex-direction: column;
+      position:absolute;
+      left:440px;
+      bottom:50px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #toast{
+      height:38px;
+      width:27vw;
+      background-color: var(--lblue);
+      padding-left:25px;
+      line-height: 35px;
+      color:var(--black);
+      font-size:20px;
+      border-radius: 5px;
+      border: solid 1px var(--lcyan);
+      opacity:0.7;
+    }
+    
+    #toast i{
+      position:relative;
+      left:20px;
+      transform: scale(0.6);
+      top:2px;
+      cursor: pointer;
+    }
+
+    
+    
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="addStud">
+   <div id="title">Student Registration</div>
+   <form method="post" action="#">
+      {% csrf_token %}
+   <div class="full"><label for="name">Name : </label></div>
+   <div class="full"><input type="text" id="name" name="name" placeholder="Plato,Eklavya"></div>
+   <div class="full" style="margin-top:10px;"><label for="fees">Fees: </label></div>
+   <div class="full"><input type="text" id="fees" name="fees" placeholder="10000,12000"></div>
+   <div id="days">
+    <div id="start"> Choose days <i id="key" class="fa-solid fa-caret-down" style="margin-left:5px;
+    color: var(--black);"></i></div>
+    <div class="class">
+       <label for="0" class="dayLabel">Sunday</label>
+       <input type="radio" class="day" name="0" id="0"> 
+    </div>
+
+    <div class="class">
+       <label for="1" class="dayLabel">Monday</label>
+       <input type="radio" class="day" name="1" id="1">
+    </div> 
+
+    <div class="class">
+       <label for="2" class="dayLabel">Tuesday</label>
+       <input type="radio" class="day" name="2" id="2"> 
+    </div>
+
+    <div class="class">
+       <label for="3" class="dayLabel">Wednesday</label>
+       <input type="radio" class="day" name="3" id="3">
+    </div> 
+
+    <div class="class">
+       <label for="4" class="dayLabel">Thursday</label>
+       <input type="radio" class="day" name="4" id="4"> 
+    </div>
+
+    <div class="class">
+       <label for="5" class="dayLabel">Friday</label>
+       <input type="radio" class="day" name="5" id="5"> 
+    </div>
+    
+    <div class="class">
+       <label for="6" class="dayLabel">Saturday</label>
+       <input type="radio" class="day" name="6" id="6"> 
+    </div>
+
+   </div>
+
+
+   <button type="submit" id="register" name="register" value="register" >Register</button>
+   </form>
+   
+   
+
+</div>
+
+{% for msg in messages %} 
+   <div id="centerer">
+   <div id="toast">
+   {{msg}} <i id="cross" class="fa-solid fa-xmark"></i>
+   </div>
+   </div>
+
+   {% endfor %}
+
+
+
+{% endblock %}
+
+{% block script %}
+<script>
+   //for dropdown
+   const key = document.getElementById("key");
+   const changed = document.getElementsByClassName("class");
+   var flag=0;
+   key.addEventListener("click",function(){
+      if(flag==0){
+      for(let i=0;i<changed.length;i++){
+         changed[i].style.display = "block";
+         flag=1;
+      }
+   }
+      else{
+         for(let i=0;i<changed.length;i++){
+         changed[i].style.display = "none";
+         flag=0;
+      }
+   }
+
+   });
+
+   //for toast
+   var cross = document.getElementById("cross");
+   var div = document.getElementById("toast");
+
+   cross.addEventListener("click",function(){
+        div.style.display="none";
+
+   });
+
+
+
+
+</script>
+
+
+{% endblock %}
+

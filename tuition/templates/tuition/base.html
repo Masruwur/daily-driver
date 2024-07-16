@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+        <style>
+            :root{
+                --whitesmoke:whitesmoke;
+                --cornblue:cornflowerblue;
+                --black:black;
+                --white:white;
+                --lgray:lightgrey;
+                --hbg:  #93CCEA;
+                --awhite:antiquewhite;
+                --grey:grey;
+                --lblue:lightblue;
+                --lcyan:lightcyan;
+                --whitesmoketext:whitesmoke;
+                --cornbluetext:cornflowerblue;
+
+            }
+
+            .dark-theme{
+                --cornblue: rgb(0, 230, 138);
+                --whitesmoke: #46424f;
+                --white:black;
+                --black:white;
+                --cornbluetext:whitesmoke;
+                --hbg:rgb(77, 255, 184);
+                --lblue: lightseagreen;
+                --lcyan:  rgb(97, 173, 169);
+            }
+
+            body{
+                margin:0px;
+                background-color: var(--white);
+            }
+            /* plain navbar*/
+            #topbar{
+                display:flex;
+                height:60px;
+                width:100vw;
+                position:fixed;
+                background-color: var(--cornblue);
+            }
+            #intro{
+                height:60px;
+                display:flex;
+                position:relative;
+                left:20px;
+                text-align: center;
+                color:var(--whitesmoketext);
+                font-size:35px;
+                line-height:60px;
+                font-weight:bold;
+            }
+            /* actions on navbar*/
+            #menu{
+                height:60px;
+                width: 450px;
+                display:grid;
+                grid-template-columns:1fr 1fr 1fr;
+                position:absolute;
+                right:0px;
+            }
+            .action{
+                text-align:center;
+                line-height: 60px;
+                font-size: 22px;
+                font-weight:bold;
+                color:var(--whitesmoketext);
+                cursor:pointer;
+                transition:0.3s;
+            }
+            .action:hover{
+                background-color: var(--hbg);
+            }
+            
+            .action a{
+                text-decoration: none;
+                height:60px;
+                line-height:60px;
+                font-size:22px;
+                color:var(--whitesmoketext);
+            }
+
+            #drop div.fee{
+                display:none;
+                text-align:center;
+                font-size:18px;
+                height:50px;
+                line-height: 50px;
+                color:var(--cornbluetext);
+                background-color: var(--whitesmoke);
+                border-bottom: solid 1px var(--lgray);
+                font-weight: normal;
+            }
+
+            #drop:hover div.fee{
+                display:block;
+
+            }
+           
+            
+            /*toggle*/
+
+            #togglediv{
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                position:absolute;
+                right:500px;
+                top:20px;
+            }
+            #tLabel{
+               position:relative;
+               display:inline-block; 
+               height:20px;
+               width:50px;
+               background:var(--whitesmoke);
+               border-radius:200px;
+               cursor:pointer;
+               box-shadow: inset 0px 5px 15px rgba(0,0,0,0.4),inset 0px -5px 15px rgba(0,0,0,0.4);
+               transition: 0.3s;
+               }     
+            #tLabel::after{
+                 content:"";
+                 position:absolute;
+                 display:inline-block;
+                 height: 19px;
+                 width:19px;
+                 background:linear-gradient(180deg,#ffcc89,#d8860b);
+                 border-radius:200px;
+                 transition:0.3s;
+                }
+
+
+            #toggle{
+                visibility: hidden;
+                }
+           
+
+                 /*animation for toggle*/
+            input:checked + #tLabel{
+                 background-color: black;
+                }
+            input:checked +#tLabel::after{
+                 transform:translateX(32px);
+                 background:linear-gradient(180deg,#777,#3a3a3a);
+                }
+
+            
+
+
+        </style>
+        {% block style %}
+        {% endblock %}
+    </head>
+
+    <body>
+      <nav id="topbar">
+        <div id="intro">Daily Driver</div>
+        <div id="togglediv">
+            <input type="checkbox" id="toggle" name="toggle" value="checked">
+            <label for="toggle" id="tLabel"></label>
+            <div id="bg"></div>
+        </div>
+        <div id="menu">
+            <div class="action" id="mainRedir">
+                <a href="/tuition/{{current}}">Table</a>
+            </div>
+           
+            <div class="action" id="update">
+                <a href="/tuition/{{current}}/update">Update</a>
+            </div>
+
+            <div class="action" id="drop">
+                Fees <i class="fa-solid fa-caret-down" style="margin-left:5px;"></i>
+                {% for item in students %}
+                <div class="fee">{{item.name}} : {{item.fees}}</div>
+                {% endfor %}
+            </div>
+            
+        </div>
+      </nav>
+
+
+
+      {% block content %}
+      {% endblock %}
+
+
+      {% block script %}
+      {% endblock %}
+
+      <script>
+         const toggle = document.getElementById("tLabel");
+         var state = localStorage.getItem("state");
+         if(state=="dark"){
+           toggle.click();
+           document.body.classList.toggle("dark-theme");
+         }
+         
+       
+        toggle.addEventListener("click",function(){
+            if(state=="light"){
+                document.body.classList.toggle("dark-theme");
+                localStorage.setItem("state","dark");
+            }
+            else{
+                document.body.classList.toggle("dark-theme");
+                localStorage.setItem("state","light");
+            }
+           
+        });
+      </script>
+
+    </body>
+</html>

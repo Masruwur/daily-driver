@@ -1,0 +1,197 @@
+{% extends "tuition/base.html" %}
+{% block title %}
+Current
+{% endblock %}
+
+{% block style %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+rel="stylesheet"> 
+<style>
+  /* data table*/
+ #table{
+     position:relative;
+     width:60vw;
+     height:80vh;
+     display:flex;
+     flex-direction: column;
+     align-items:center;
+     top:170px;
+     left:45px;
+ }
+
+ .entry{
+     width:55vw;
+     height:40px;
+     display:grid;
+     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+     border-bottom:solid;
+     border-color:var(--lgray);
+     border-width: 1px;
+     align-items: center;
+     justify-content: space-around;
+ }
+ 
+ .info{
+   height:40px;
+   color: var(--cornbluetext);
+   background-color: var(--whitesmoke);
+   text-align: center;
+   line-height: 40px;
+ }
+ .header{
+  height:40px;
+  color:var(--awhite);
+  background-color: var(--cornblue);
+  text-align: center;
+  line-height:40px;
+ }
+ #h{
+  border:none;
+ }
+ .increment{
+  border:none;
+  background-color: var(--whitesmoke);
+  color:var(--cornbluetext);
+  font-weight:bold;
+  cursor: pointer;
+ }
+ /*recent table*/
+ #recent{
+  display:flex;
+  flex-direction:column;
+  width:20vw;
+  height:30vh;
+  background-color:var(--whitesmoke);
+  position:absolute;
+  right: 160px;
+  top:170px;
+ }
+ #rHead{
+  width:20vw;
+  height:50px;
+  background-color:var(--whitesmoke);
+  text-align: center;
+  line-height: 50px;;
+  color:var(--black);
+  font-size: 22px;
+  border-bottom: solid 1px var(--lgray);
+  
+ }
+ #rMain{
+  width:20vw;
+  display:flex;
+  flex-direction: column;
+ }
+ .listing{
+  background-color: var(--whitesmoke);
+  height:50px;
+  text-align: center;
+  line-height: 50px;
+  font-size:18px;
+  font-family: "poppins",sans serif;
+  color: var(--black);
+  font-weight:200;
+  cursor:pointer;
+ }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="table">
+
+    <div class="entry" id="h" >
+     <div class="header" >Serial</div>
+     <div class="header" >Name</div>
+     <div class="header" >Days</div>
+     <div class="header">Status</div>
+     <div class="header">Action</div>
+    </div>
+    {% for item in students %}
+    <div class="entry">
+      <div class="info">{{item.id}}</div>
+      <div class="info">{{item.name}}</div>
+      <div class="info">{{item.days}}</div>
+      <div class="info">{{item.stat}}</div>
+      <div class="info">
+       <form method="post" action="#">
+        {% csrf_token %}
+        <button type="submit" class="increment" id="{{item.name}}" name="{{item.name}}" value="add">
+           <i class="fa-solid fa-plus" style="color:greenyellow;"></i> Add
+        </button>
+       </form>
+      </div>
+ 
+    </div>
+    {% endfor %}
+   </div>
+
+
+   <div id="recent">
+     <div id="rHead">
+       Tuitions Today
+     </div>
+  
+     <div id="rMain">
+      {% for item in todayClass %}
+      <div class="listing">{{item.name}}</div>
+      {% endfor %}
+     </div>
+
+
+   </div>
+{% endblock %} 
+
+{% block script %}
+<script>
+
+  //clearing
+  
+  const now = new Date();
+  const today = now.getDate();
+  const div = document.getElementsByClassName("listing");
+
+  let current_stored = localStorage.getItem("today");
+
+  if(!current_stored){
+    localStorage.setItem("today",today.toString());
+    
+  }
+  else{
+    if(Number(current_stored)!=today){
+      for(let i=0;i<div.length;i++){
+         localStorage.removeItem(i.toString());
+         
+      }
+      localStorage.setItem("today",today.toString());
+    }
+  }
+
+  //retrieving
+  for(let i=0;i<div.length;i++){
+    if(localStorage.getItem(i.toString())){
+      div[i].style.textDecoration="line-through";
+    }
+  }
+
+  //setting
+  for(let i=0;i<div.length;i++){
+    div[i].addEventListener("click",function(){
+        div[i].style.textDecoration="line-through";
+        localStorage.setItem(i.toString(),"True");
+        let name=div[i].innerText;
+        let button=document.getElementById(name);
+        
+        button.click();
+
+    });
+  }
+
+   button = document.get
+
+  
+</script>
+
+{% endblock %}
